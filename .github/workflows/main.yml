@@ -57,6 +57,9 @@ jobs:
               working-directory: backend
               run: export NODE_OPTIONS="--max-old-space-size=8192"
                    npm install
+                   
+            - name: Install Serverless plug in
+              run:  serverless plugin install -n serverless-webpack
 
               #serverless deploy
 
