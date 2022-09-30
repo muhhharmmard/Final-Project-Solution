@@ -26,9 +26,6 @@ jobs:
 
                   node-version: "12.x"
               
-            - name: Move into the backend directory
-              
-              run: cd ./backend
 
               #install serverless
 
@@ -57,11 +54,13 @@ jobs:
               #install node modules
 
             - name: Install NPM dependencies
+              working-directory: cd ./backend
 
               run: npm install
 
               #serverless deploy
 
             - name: Deploy
+              working-directory: cd ./backend
 
               run: sls deploy 
