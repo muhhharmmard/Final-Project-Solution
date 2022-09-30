@@ -15,29 +15,28 @@ jobs:
     deploy:
 
         runs-on: ubuntu-latest
-
         steps:
 
-            - uses: actions/checkout@v1
+          - uses: actions/checkout@v1
 
-            - uses: actions/setup-node@v1
+          - uses: actions/setup-node@v1
 
-              with:
+            with:
 
-                  node-version: "16.17.1"
-              
+              node-version: "16.x"
+           
 
+          
               #install serverless
+          - name: Install Serverless Framework
 
-            - name: Install Serverless Framework
-
-              run: npm install -g serverless
+            run: npm install -g serverless
 
               # authentication
 
-            - name: Serverless AWS authentication
+          - name: Serverless AWS authentication
 
-              run: sls config credentials --provider aws --key ${{ secrets.AWS_KEY_DEPLOY }} --secret ${{ secrets.AWS_SECRET_DEPLOY }}
+            run: sls config credentials --provider aws --key ${{ secrets.AWS_KEY_DEPLOY }} --secret ${{ secrets.AWS_SECRET_DEPLOY }}
 
               # create ENV, use the shell `cat` command to create env.yml from secrets
 
@@ -53,21 +52,21 @@ jobs:
 
               #install node modules
 
-            - name: Install NPM dependencies
-              working-directory: backend
-              run: export NODE_OPTIONS="--max-old-space-size=8192"
+          - name: Install NPM dependencies
+            working-directory: backend
+            run: export NODE_OPTIONS="--max-old-space-size=8192"
                    
-            - name: Dependencies  
-              working-directory: backend
-              run: npm install
+          - name: Dependencies  
+            working-directory: backend
+            run: npm install
                    
-            - name: Install Serverless plug in
-              working-directory: backend
-              run:  serverless plugin install -n serverless-webpack
+          - name: Install Serverless plug in
+            working-directory: backend
+            run:  serverless plugin install -n serverless-webpack
 
               #serverless deploy
 
-            - name: Deploy
-              working-directory: backend
+          - name: Deploy
+            working-directory: backend
 
-              run: sls deploy --verbose
+            run: sls deploy --verbose
