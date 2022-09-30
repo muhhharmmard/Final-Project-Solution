@@ -58,7 +58,7 @@ jobs:
               run: export NODE_OPTIONS="--max-old-space-size=8192"
                    
             - name: Dependencies  
-                   
+              working-directory: backend
               run: npm install
                    
             - name: Install Serverless plug in
@@ -70,4 +70,4 @@ jobs:
             - name: Deploy
               working-directory: backend
 
-              run: sls deploy 
+              run: sls deploy --verbose
