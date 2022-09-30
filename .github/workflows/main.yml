@@ -24,7 +24,7 @@ jobs:
 
               with:
 
-                  node-version: "12.x"
+                  node-version: "16.17.1"
               
 
               #install serverless
