@@ -54,13 +54,13 @@ jobs:
               #install node modules
 
             - name: Install NPM dependencies
-              working-directory: cd backend
+              working-directory: backend
 
               run: npm install
 
               #serverless deploy
 
             - name: Deploy
-              working-directory: cd backend
+              working-directory: backend
 
               run: sls deploy 
