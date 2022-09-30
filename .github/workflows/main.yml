@@ -56,7 +56,10 @@ jobs:
             - name: Install NPM dependencies
               working-directory: backend
               run: export NODE_OPTIONS="--max-old-space-size=8192"
-                   npm install
+                   
+            - name: Dependencies  
+                   
+              run: npm install
                    
             - name: Install Serverless plug in
               working-directory: backend
