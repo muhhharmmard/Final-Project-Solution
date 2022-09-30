@@ -59,6 +59,7 @@ jobs:
                    npm install
                    
             - name: Install Serverless plug in
+              working-directory: backend
               run:  serverless plugin install -n serverless-webpack
 
               #serverless deploy
