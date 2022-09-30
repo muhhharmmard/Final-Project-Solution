@@ -1,5 +1,5 @@
 # TODO: Change the name of the org 
-org: muhhharmmard
+org: muhharmmard
 app: serverless-todo-app
 service: serverless-todo-app
 
@@ -14,7 +14,6 @@ package:
 provider:
   name: aws
   runtime: nodejs12.x
-  lambdaHashingVersion: '20201221'
 
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'us-east-1'}
@@ -32,9 +31,9 @@ provider:
     SIGNED_URL_EXPIRATION: 300
   
 
-  logs:
+ # logs:
     # Enable API Gateway logs
-    restApi: true
+  #  restApi: true
 
   iam:
     role:
@@ -46,7 +45,8 @@ provider:
           Resource: "*"
 
 
-functions:
+functions: 
+
 
   Auth:
     handler: src/lambda/auth/auth0Authorizer.handler
