@@ -25,6 +25,10 @@ jobs:
               with:
 
                   node-version: "12.x"
+              
+            - name: Move into the backend directory
+              
+              run: cd ./backend
 
               #install serverless
 
@@ -60,4 +64,4 @@ jobs:
 
             - name: Deploy
 
-              run: sls deploy -s prod
+              run: sls deploy 
