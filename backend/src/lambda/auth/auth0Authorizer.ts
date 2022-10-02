@@ -6,6 +6,7 @@ import { createLogger } from '../../utils/logger'
 import Axios from 'axios'
 import { Jwt } from '../../auth/Jwt'
 import { JwtPayload } from '../../auth/JwtPayload'
+import { Key } from '../../auth/Key'
 
 const logger = createLogger('auth')
 
@@ -21,7 +22,6 @@ export const handler = async (
   try {
     const jwtToken = await verifyToken(event.authorizationToken)
     logger.info('User was authorized', jwtToken)
-
     return {
       principalId: jwtToken.sub,
       policyDocument: {
@@ -37,7 +37,6 @@ export const handler = async (
     }
   } catch (e) {
     logger.error('User not authorized', { error: e.message })
-
     return {
       principalId: 'user',
       policyDocument: {
@@ -61,32 +60,23 @@ async function verifyToken(authHeader: string): Promise<JwtPayload> {
   // TODO: Implement token verification
   // You should implement it similarly to how it was implemented for the exercise for the lesson 5
   // You can read more about how to do this here: https://auth0.com/blog/navigating-rs256-and-jwks/
-  const jwtKid = jwt.header.kid;
-  const jwks = await Axios.get(jwksUrl);
-
-  const signingKey = jwks.data.keys.filter((k) => k.kid === jwtKid)[0];
-
-  if (!signingKey) {
-    throw new Error(`Unable to find a signing key that matches '${jwtKid}'`);
-  }
-
-  const { x5c } = signingKey;
-
-  const cert = `-----BEGIN CERTIFICATE-----\n${x5c[0]}\n-----END CERTIFICATE-----`;
-  if (!jwt) {
-    throw new Error("invalid token");
-  }
-  return verify(token, cert, { algorithms: ["RS256"] }) as JwtPayload;
+  const requestedKeyID: string = jwt?.header?.kid as string
+  const jwks = await Axios.get(jwksUrl)
+  const keyset: Array<Key> = jwks.data.keys
+  const matchedKeyItem = keyset.filter((key) => key.kid === requestedKeyID)
+  if (!matchedKeyItem || !matchedKeyItem.length)
+    throw new Error('Provided keyId is invalid')
+  const PEM: string = `-----BEGIN CERTIFICATE-----\n${matchedKeyItem[0].x5c[0]
+    .match(/.{1,64}/g)
+    .join('\n')}\n-----END CERTIFICATE-----\n`
+  return verify(token, PEM, { algorithms: ['RS256'] }) as JwtPayload;
 }
 
 function getToken(authHeader: string): string {
-  if (!authHeader) throw new Error('No authentication header')
-
+  if (!authHeader) throw new Error('Missing authentication info in header')
   if (!authHeader.toLowerCase().startsWith('bearer '))
-    throw new Error('Invalid authentication header')
-
+    throw new Error('Invalid authentication strategy. Only accept BEARER!')
   const split = authHeader.split(' ')
   const token = split[1]
-
   return token
 }

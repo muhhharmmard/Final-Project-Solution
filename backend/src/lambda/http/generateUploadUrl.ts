@@ -4,35 +4,40 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import * as middy from 'middy'
 import { cors, httpErrorHandler } from 'middy/middlewares'
 
-import { generateUploadUrl } from '../../businessLogic/todos'
+import { createAttachmentPresignedUrl } from '../../businessLogic/todos'
+import { getUserId } from '../utils'
 
 export const handler = middy(
   async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     const todoId = event.pathParameters.todoId
     // TODO: Return a presigned URL to upload a file for a TODO item with the provided id
-    
-    if (!todoId) {
+    const userId = getUserId(event)
+    try {
+      const imageURL = await createAttachmentPresignedUrl(userId, todoId)
+      return {
+        statusCode: 201,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true
+        },
+        body: JSON.stringify({ uploadUrl: imageURL })
+      }
+    } catch (err) {
       return {
         statusCode: 500,
-        body: "Please input item id to generate signed url"
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true
+        },
+        body: JSON.stringify({
+          path: 'generateUploadURL',
+          message: err.message
+        })
       }
     }
-    const signedUrl = await generateUploadUrl(todoId);
-
-    return {
-      statusCode: 201,
-      headers: {
-        'Access-Control-Allow-Credentials': true,
-        'Access-Control-Allow-Origin': '*'
-      },
-      body: JSON.stringify({
-        uploadUrl: signedUrl
-      })
-    }
   }
-  
 )
-// Double cors hahahahhahahahha
+
 handler
   .use(httpErrorHandler())
   .use(
