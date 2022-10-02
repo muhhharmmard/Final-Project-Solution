@@ -9,12 +9,12 @@ const XAWS = AWSXRay.captureAWS(AWS)
 const logger = createLogger('dataAccess-todo')
 
 // TODO: Implement the dataLayer logic
-export class TodosAccess {
+export class TodoAccess {
     constructor(
         private readonly docClient: DocumentClient = new XAWS.DynamoDB.DocumentClient(),
         private readonly todosTable = process.env.TODOS_TABLE) { }
 
-    getTodos = async (userId: string): Promise<TodoItem[]> => {
+    getAllTodos = async (userId: string): Promise<TodoItem[]> => {
         logger.log('info', 'Get todos for user: '.concat(userId))
         let todos: TodoItem[]
         const result = await this.docClient.query({
