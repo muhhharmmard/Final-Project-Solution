@@ -109,12 +109,11 @@ functions:
             summary: 'Create new todo'
             description: 'Create new todo'
             requestModels:
-              'application/json': CreateTodoRequest
+              'application/json': CreateTodoRequest   #the schema has been cofigured as part of custom.ducumentation.model at the top
 
     iamRoleStatements:
       - Effect: Allow
         Action:
-          - dynamodb:Query
           - dynamodb:PutItem
         Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}'
 
@@ -132,12 +131,11 @@ functions:
             summary: 'Update todo'
             description: 'Update todo'
             requestModels:
-              'application/json': UpdateTodoRequest
+              'application/json': UpdateTodoRequest  #the schema has been cofigured as part of custom.documentation.model at the top
 
     iamRoleStatements:
       - Effect: Allow
         Action:
-          - dynamodb:Query
           - dynamodb:UpdateItem
         Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}'
 
@@ -154,7 +152,6 @@ functions:
     iamRoleStatements:
       - Effect: Allow
         Action:
-          - dynamodb:Query
           - dynamodb:DeleteItem
         Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}'
 
@@ -171,7 +168,6 @@ functions:
     iamRoleStatements:
       - Effect: Allow
         Action:
-          - dynamodb:Query
           - dynamodb:UpdateItem
         Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}'
 
