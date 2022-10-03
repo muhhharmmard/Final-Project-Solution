@@ -81,7 +81,7 @@ functions:
           authorizer: 
             type: token
             name: Auth
-
+          reqValidatorName: RequestBodyValidator
   
 
     iamRoleStatements:
@@ -104,7 +104,7 @@ functions:
           authorizer:
              type: token
              name: Auth
-          reqValidatorName: 'RequestBodyValidator'
+          reqValidatorName: RequestBodyValidator
           documentation:
             summary: 'Create new todo'
             description: 'Create new todo'
@@ -126,7 +126,7 @@ functions:
           method: patch
           cors: true
           path: todos/{todoId}
-          reqValidatorName: 'RequestBodyValidator'
+          reqValidatorName: RequestBodyValidator
           documentation:
             summary: 'Update todo'
             description: 'Update todo'
