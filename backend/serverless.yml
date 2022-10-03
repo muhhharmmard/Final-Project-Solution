@@ -1,6 +1,6 @@
 # TODO: Change the name of the org 
 org: muhhharmmard
-app: serverlessnew
+app: serverlessnewww
 service: serverless-application
 
 plugins:
@@ -33,7 +33,7 @@ provider:
 
 
   stage: ${opt:stage, 'dev'}
-  region: ${opt:region, 'us-east-1'}
+  region: ${opt:region, 'us-east-2'}
 
   tracing:
     lambda: true
@@ -44,7 +44,7 @@ provider:
   environment:
     TODOS_TABLE: Todos-${self:provider.stage}
     TODOS_CREATED_AT_INDEX: CreatedAtIndex
-    ATTACHMENT_S3_BUCKET: dmay-serverless-todo-images-${self:provider.stage}
+    ATTACHMENT_S3_BUCKET: dmay22-serverless-todo-images-${self:provider.stage}
     SIGNED_URL_EXPIRATION: 300
 
   #logs:
@@ -148,6 +148,7 @@ functions:
           method: delete
           cors: true
           path: todos/{todoId}
+          reqValidatorName: RequestBodyValidator
 
     iamRoleStatements:
       - Effect: Allow
@@ -164,6 +165,7 @@ functions:
           method: post
           cors: true
           path: todos/{todoId}/attachment
+          reqValidatorName: RequestBodyValidator
 
     iamRoleStatements:
       - Effect: Allow
