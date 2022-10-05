@@ -1,6 +1,6 @@
 # TODO: Change the name of the org 
 org: muhhharmmard
-app: serverlessnewww
+app: serverlessss
 service: serverless-application
 
 plugins:
@@ -79,7 +79,6 @@ functions:
           cors: true
           private: true
           authorizer: 
-            type: token
             name: Auth
           reqValidatorName: RequestBodyValidator
   
@@ -102,7 +101,6 @@ functions:
           path: todos
           cors: true
           authorizer:
-             type: token
              name: Auth
           reqValidatorName: RequestBodyValidator
           documentation:

@@ -9,7 +9,7 @@ const jwksUrl = 'https://dev-5v8eb7o9.us.auth0.com/.well-known/jwks.json';
 
 
 export const handler = async (
-  event: APIAuthorizerEvent
+  event: APIGatewayTokenAuthorizerEvent
 ): Promise<APIGatewayAuthorizerResult> => {
 
   logger.info('Authorizing', event.authorizationToken)
