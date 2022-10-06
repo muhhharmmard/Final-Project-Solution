@@ -16,7 +16,7 @@ package:
 custom:
   webpack:
      includeModules: true
-     concurrency: 2
+     concurrency: 3
 
 
   documentation:
@@ -77,9 +77,7 @@ functions:
           method: get
           path: todos
           cors: true
-          private: true
-          authorizer: 
-            name: Auth
+          authorizer: Auth
           reqValidatorName: RequestBodyValidator
   
 
@@ -100,8 +98,7 @@ functions:
           method: post
           path: todos
           cors: true
-          authorizer:
-             name: Auth
+          authorizer: Auth
           reqValidatorName: RequestBodyValidator
           documentation:
             summary: 'Create new todo'

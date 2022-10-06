@@ -1,49 +1,42 @@
-import 'source-map-support/register'
+import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
+import * as middy from "middy";
+import { cors, httpErrorHandler } from "middy/middlewares";
+import { deleteTodo } from "../../businessLogic/todo";
+import { createLogger } from "../../utils/logger";
+import { decodeJWTFromAPIGatewayEvent } from "../../auth/utils";
+import { parseUserId } from "../../auth/utils";
 
-import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
-import * as middy from 'middy'
-import { cors, httpErrorHandler } from 'middy/middlewares'
-
-import { deleteTodo } from '../../businessLogic/todos'
-import { getUserId } from '../utils'
+const logger = createLogger("todo");
 
 export const handler = middy(
   async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-    const todoId = event.pathParameters.todoId
-    const userId = getUserId(event)
-    // TODO: Remove a TODO item by idconst userId = getUserId(event)
-    try {
-      await deleteTodo(userId, todoId)
-      return {
-        statusCode: 200,
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Credentials': true
-        },
-        body: JSON.stringify({
-          path: 'deleteTodo',
-          message: todoId
-        })
-      }
-    } catch (err) {
-      return {
-        statusCode: 500,
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Credentials': true
-        },
-        body: JSON.stringify({
-          message: err.message
-        })
-      }
-    }
+    console.log("Processing event: ", event);
+    const todoId = event.pathParameters.todoId;
+
+    const jwtToken = decodeJWTFromAPIGatewayEvent(event);
+
+    const userId = parseUserId(jwtToken);
+
+    // TODO: Remove a TODO item by id
+    await deleteTodo(todoId, userId);
+
+    logger.info("TODOITEM DELETED", {
+      key: todoId,
+      userId: userId,
+      date: new Date().toISOString,
+    });
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify(true),
+    };
   }
-)
+);
 
 handler
-  .use(httpErrorHandler())
   .use(
     cors({
-      credentials: true
+      credentials: true,
     })
   )
+  .use(httpErrorHandler());
