@@ -10,9 +10,9 @@ export class TodoAccess {
   constructor(
     private readonly docClient: DocumentClient = createDynamoDBClient(),
     private readonly todoTable = process.env.TODOS_TABLE,
-    private readonly todoIndex = process.env.TODO_USER_INDEX,
-    private readonly bucketName = process.env.IMAGES_S3_BUCKET,
-    private readonly urlExpiration = process.env.S3_URL_EXPIRATION,
+    private readonly todoIndex = process.env.TODO_CREATEDAT_INDEX,
+    private readonly bucketName = process.env.ATTACHMENT_S3_BUCKET,
+    private readonly urlExpiration = process.env.SIGNED_URL_EXPIRATION,
     private readonly s3 = new XAWS.S3({
       signatureVersion: "v4",
     })
